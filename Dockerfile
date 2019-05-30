@@ -5,27 +5,12 @@ FROM arm64v8/python:3.6.5-stretch
 ENV LANG C.UTF-8
 
 # Enable cross-build for aarch64
-COPY ./vendor/qemu-bin /usr/bin/
-RUN [ "cross-build-start" ]
+#COPY ./vendor/qemu-bin /usr/bin/
+#RUN [ "cross-build-start" ]
 
 # Set the versions
-ENV DOCKER_COMPOSE_VER 1.22.0
-# docker-compose requires pyinstaller 3.3.1 (check github.com/docker/compose/requirements-build.txt)
-# If this changes, you may need to modify the version of "six" below
-ENV PYINSTALLER_VER 3.3.1
-# "six" is needed for PyInstaller. v1.11.0 is the latest as of PyInstaller 3.3.1
-ENV SIX_VER 1.11.0
-
-# Install dependencies
-# RUN apt-get update && apt-get install -y
-RUN pip install six==$SIX_VER
-
-# Compile the pyinstaller "bootloader"
-# https://pyinstaller.readthedocs.io/en/stable/bootloader-building.html
-WORKDIR /build/pyinstallerbootloader
-RUN curl -fsSL https://github.com/pyinstaller/pyinstaller/releases/download/v$PYINSTALLER_VER/PyInstaller-$PYINSTALLER_VER.tar.gz | tar xvz >/dev/null \
-    && cd PyInstaller*/bootloader \
-    && python3 ./waf all
+ENV DOCKER_COMPOSE_VER 1.24.0
+RUN pip install --upgrade pip
 
 # Clone docker-compose
 WORKDIR /build/dockercompose
