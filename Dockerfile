@@ -1,5 +1,5 @@
 # Dockerfile to build docker-compose for aarch64
-FROM python:3.6-stretch
+FROM python:3.7-buster
 
 # Add env
 ENV LANG C.UTF-8
@@ -9,7 +9,7 @@ ENV LANG C.UTF-8
 #RUN [ "cross-build-start" ]
 
 # Set the versions
-ENV DOCKER_COMPOSE_VER 1.24.0
+ENV DOCKER_COMPOSE_VER 1.27.3
 RUN pip install --upgrade pip
 
 # Clone docker-compose
@@ -20,7 +20,7 @@ RUN git clone https://github.com/docker/compose.git . \
 # Run the build steps (taken from github.com/docker/compose/script/build/linux-entrypoint)
 RUN mkdir ./dist \
     && pip install -q -r requirements.txt -r requirements-build.txt \
-    && ./script/build/write-git-sha \
+    && ./script/build/write-git-sha > compose/GITSHA \
     && pyinstaller docker-compose.spec \
     && mv dist/docker-compose ./docker-compose-$(uname -s)-$(uname -m)
 
